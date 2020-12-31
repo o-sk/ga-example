@@ -8,6 +8,7 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	ga "google.golang.org/api/analyticsreporting/v4"
+	"google.golang.org/api/option"
 )
 
 func main() {
@@ -26,8 +27,9 @@ func main() {
 		return
 	}
 
-	netClient := conf.Client(oauth2.NoContext)
-	svc, err := ga.New(netClient)
+	ctx := oauth2.NoContext
+	ts := conf.TokenSource(ctx)
+	svc, err := ga.NewService(ctx, option.WithTokenSource(ts))
 	if err != nil {
 		fmt.Println(err)
 		return
